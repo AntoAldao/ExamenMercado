@@ -35,8 +35,18 @@ public class DnaSequenceValidator implements ConstraintValidator<ValidDnaSequenc
         for (String row : dna) {
             if (row == null || row.length() != n) {
                 context.disableDefaultConstraintViolation();
+                String mensaje = (n < 4)
+                    ? "La matriz de ADN debe ser NxN. Tamaño mínimo: 4x4"
+                    : "La matriz de ADN debe ser NxN. Tamaño esperado: " + n + "x" + n;
+                context.buildConstraintViolationWithTemplate(mensaje)
+                    .addConstraintViolation();
+                return false;
+            }
+            
+            if (n < 4) {
+                context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(
-                    "La matriz de ADN debe ser NxN. Tamaño esperado: " + n + "x" + n
+                    "La matriz de ADN debe ser al menos de 4x4"
                 ).addConstraintViolation();
                 return false;
             }

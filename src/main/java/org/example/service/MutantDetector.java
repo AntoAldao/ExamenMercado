@@ -159,6 +159,10 @@ public class MutantDetector {
             if (row == null || row.length() != n) {
                 throw new IllegalArgumentException("La matriz de ADN debe ser NxN");
             }
+
+            if (n < SEQUENCE_LENGTH) {
+                throw new IllegalArgumentException("La matriz de ADN debe ser al menos de 4x4");
+            }
             
             // Validation Set O(1): Verificar caracteres válidos
             for (char base : row.toCharArray()) {
