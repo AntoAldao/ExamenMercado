@@ -5,6 +5,8 @@ import org.example.dto.StatsResponse;
 import org.example.repository.DnaRecordRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 /**
  * Servicio para calcular estadísticas de verificaciones de ADN.
  * 
@@ -27,6 +29,23 @@ public class StatsService {
     public StatsResponse getStats() {
         long mutantCount = dnaRecordRepository.countMutants();
         long humanCount = dnaRecordRepository.countHumans();
+        
+        // Calcular ratio, manejando división por cero
+        double ratio = humanCount > 0 ? (double) mutantCount / humanCount : 0.0;
+        
+        return new StatsResponse(mutantCount, humanCount, ratio);
+    }
+
+    /**
+     * Obtiene las estadísticas filtradas por rango de fechas.
+     * 
+     * @param startDate Fecha de inicio (opcional)
+     * @param endDate Fecha de fin (opcional)
+     * @return StatsResponse con contadores y ratio del período especificado
+     */
+    public StatsResponse getStatsByDateRange(LocalDate startDate, LocalDate endDate) {
+        long mutantCount = dnaRecordRepository.countMutantsByDateRange(startDate, endDate);
+        long humanCount = dnaRecordRepository.countHumansByDateRange(startDate, endDate);
         
         // Calcular ratio, manejando división por cero
         double ratio = humanCount > 0 ? (double) mutantCount / humanCount : 0.0;

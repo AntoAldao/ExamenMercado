@@ -2,6 +2,7 @@ package org.example.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.entity.DnaRecord;
+import org.example.exception.InvalidDnaException;
 import org.example.repository.DnaRecordRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,5 +47,19 @@ public class MutantService {
                 dnaRecordRepository.save(record);
                 return isMutant;
             });
+    }
+
+    /**
+     * Elimina un registro de ADN por su hash SHA-256.
+     * 
+     * @param dnaHash Hash SHA-256 del ADN a eliminar
+     * @throws InvalidDnaException si el registro no existe
+     */
+    @Transactional
+    public void deleteDnaRecord(String dnaHash) {
+        DnaRecord record = dnaRecordRepository.findByDnaHash(dnaHash)
+            .orElseThrow(() -> new InvalidDnaException("No se encontró registro con hash: " + dnaHash));
+        
+        dnaRecordRepository.delete(record);
     }
 }

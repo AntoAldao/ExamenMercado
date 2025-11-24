@@ -113,7 +113,12 @@ class MutantServiceTest {
     @DisplayName("Debe usar caché si el ADN mutante ya existe en BD")
     void testAnalyzeMutantDnaFromCache() {
         // Arrange: Simular que YA existe en BD
-        DnaRecord cachedRecord = new DnaRecord(1L, "ATGCGA,CAGTGC,TTATGT,AGAAGG,CCCCTA,TCACTG", true);
+        DnaRecord cachedRecord = new DnaRecord();
+        cachedRecord.setId(1L);
+        cachedRecord.setDnaSequence("ATGCGA,CAGTGC,TTATGT,AGAAGG,CCCCTA,TCACTG");
+        cachedRecord.setDnaHash("mockhash123");
+        cachedRecord.setIsMutant(true);
+        
         when(dnaRecordRepository.findByDnaSequence(anyString()))
             .thenReturn(Optional.of(cachedRecord));
 
@@ -131,7 +136,12 @@ class MutantServiceTest {
     @DisplayName("Debe usar caché si el ADN humano ya existe en BD")
     void testAnalyzeHumanDnaFromCache() {
         // Arrange
-        DnaRecord cachedRecord = new DnaRecord(2L, "ATGCGA,CAGTGC,TTATTT,AGACGG,GCGTCA,TCACTG", false);
+        DnaRecord cachedRecord = new DnaRecord();
+        cachedRecord.setId(2L);
+        cachedRecord.setDnaSequence("ATGCGA,CAGTGC,TTATTT,AGACGG,GCGTCA,TCACTG");
+        cachedRecord.setDnaHash("mockhash456");
+        cachedRecord.setIsMutant(false);
+        
         when(dnaRecordRepository.findByDnaSequence(anyString()))
             .thenReturn(Optional.of(cachedRecord));
 

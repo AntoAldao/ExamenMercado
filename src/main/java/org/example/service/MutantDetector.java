@@ -1,5 +1,6 @@
 package org.example.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -20,6 +21,7 @@ import java.util.Set;
  * 
  * @author MercadoLibre Backend Exam
  */
+@Slf4j
 @Service
 public class MutantDetector {
 
@@ -59,8 +61,10 @@ public class MutantDetector {
                 if (col <= n - SEQUENCE_LENGTH) {
                     if (checkHorizontal(matrix, row, col)) {
                         sequenceCount++;
+                        log.debug("Secuencia horizontal encontrada en fila {} columna {}", row, col);
                         // Early Termination: Retornar inmediatamente si >1 secuencia
                         if (sequenceCount > 1) {
+                            log.info("Mutante detectado con {} secuencias encontradas", sequenceCount);
                             return true;
                         }
                     }
@@ -70,7 +74,9 @@ public class MutantDetector {
                 if (row <= n - SEQUENCE_LENGTH) {
                     if (checkVertical(matrix, row, col)) {
                         sequenceCount++;
+                        log.debug("Secuencia vertical encontrada en fila {} columna {}", row, col);
                         if (sequenceCount > 1) {
+                            log.info("Mutante detectado con {} secuencias encontradas", sequenceCount);
                             return true;
                         }
                     }
@@ -80,7 +86,9 @@ public class MutantDetector {
                 if (row <= n - SEQUENCE_LENGTH && col <= n - SEQUENCE_LENGTH) {
                     if (checkDiagonalDown(matrix, row, col)) {
                         sequenceCount++;
+                        log.debug("Secuencia diagonal descendente encontrada en fila {} columna {}", row, col);
                         if (sequenceCount > 1) {
+                            log.info("Mutante detectado con {} secuencias encontradas", sequenceCount);
                             return true;
                         }
                     }
@@ -90,7 +98,9 @@ public class MutantDetector {
                 if (row <= n - SEQUENCE_LENGTH && col >= SEQUENCE_LENGTH - 1) {
                     if (checkDiagonalUp(matrix, row, col)) {
                         sequenceCount++;
+                        log.debug("Secuencia diagonal ascendente encontrada en fila {} columna {}", row, col);
                         if (sequenceCount > 1) {
+                            log.info("Mutante detectado con {} secuencias encontradas", sequenceCount);
                             return true;
                         }
                     }
@@ -98,6 +108,8 @@ public class MutantDetector {
             }
         }
         
+        log.debug("Análisis completo: {} secuencia(s) encontrada(s). Resultado: {}", 
+                  sequenceCount, sequenceCount > 1 ? "MUTANTE" : "HUMANO");
         return false;
     }
 
