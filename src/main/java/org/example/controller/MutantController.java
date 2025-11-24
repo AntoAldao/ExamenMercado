@@ -35,6 +35,14 @@ public class MutantController {
     private final StatsService statsService;
 
     /**
+     * GET / - Health check
+     */
+    @GetMapping("/")
+    public ResponseEntity<String> healthCheck() {
+        return ResponseEntity.ok("Mutant Detector API is running!");
+    }
+
+    /**
      * POST /mutant/
      * 
      * Detecta si una secuencia de ADN pertenece a un mutante.

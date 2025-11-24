@@ -94,16 +94,22 @@ public class GlobalExceptionHandler {
             Exception ex,
             HttpServletRequest request) {
         
+        // Log detallado del error
+        System.err.println("=== ERROR INTERNO ===");
+        System.err.println("Path: " + request.getRequestURI());
+        System.err.println("Method: " + request.getMethod());
+        System.err.println("Exception: " + ex.getClass().getName());
+        System.err.println("Message: " + ex.getMessage());
+        ex.printStackTrace();
+        System.err.println("===================");
+        
         ErrorResponse error = new ErrorResponse(
             LocalDateTime.now(),
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             "Internal Server Error",
-            "Ha ocurrido un error interno. Por favor, contacte al administrador.",
+            "Error: " + ex.getMessage(),
             request.getRequestURI()
         );
-        
-        // Log del error para debugging
-        ex.printStackTrace();
         
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
